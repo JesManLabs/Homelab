@@ -1,0 +1,333 @@
+# resource "opnsense_unbound_host_alias" "svc-auth-sparks-codes" {
+#   override = opnsense_unbound_host_override.lb-internal-services.id
+
+#   enabled     = true
+#   description = "Authentik auth service"
+#   hostname    = "auth"
+#   domain      = "sparks.codes"
+# }
+
+resource "opnsense_unbound_host_alias" "svc-ai-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "LiteLLM Proxy"
+  hostname    = "ai"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-local-ai-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Local-ai Proxy"
+  hostname    = "local-ai"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-ai-webui-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "open-webui"
+  hostname    = "ai-webui"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-alertmanager-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Monitoring alertmananager"
+  hostname    = "alertmanager"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-auth-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Keycloak authentication"
+  hostname    = "auth"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-bambu-studio-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Bambu Studio 3d printer control"
+  hostname    = "bambu-studio"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-bambuddy-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Bambuddy 3d printer control"
+  hostname    = "bambuddy"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-books-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Calibre-web books front-end"
+  hostname    = "books"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-books-backend-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Calibre books server"
+  hostname    = "books-backend"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-hermes-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Hermes Dashboard"
+  hostname    = "hermes"
+  domain      = "sparks.codes"
+}
+
+
+resource "opnsense_unbound_host_alias" "svc-home-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Home Assistant"
+  hostname    = "home"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-codeserver-home-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Home assistant vs code server"
+  hostname    = "codeserver-home"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-dashboard-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Hajimari dashboard"
+  hostname    = "dashboard"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-esphome-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "ESPHome dashboard"
+  hostname    = "esphome"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-codeserver-esphome-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "ESPHome VS code server"
+  hostname    = "codeserver-esphome"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-emqx-dashboard-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "EMQX dashboard"
+  hostname    = "emqx-dashboard"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-frigate-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Frigate NVR"
+  hostname    = "frigate"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-git-iwrite-software" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Forgejo"
+  hostname    = "forgejo"
+  domain      = "iwrite.software"
+}
+
+resource "opnsense_unbound_host_alias" "svc-media-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Media - Jellyfin"
+  hostname    = "media"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-metube-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Metube youtube video downloader"
+  hostname    = "metube"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-navidrome-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Media - navidrome"
+  hostname    = "navidrome"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-monitoring-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Prometheus monitoring services / grafana"
+  hostname    = "monitoring"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-notify-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Ntfy server"
+  hostname    = "notify"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-netboot-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Netboot server"
+  hostname    = "netboot"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-obsidian-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Obsidian Notetaking Application"
+  hostname    = "obsidian"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-paperless-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Document manager"
+  hostname    = "paperless"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-photos-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Photoprism photo storage server"
+  hostname    = "photos"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-pxe-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Custom PXE boot server"
+  hostname    = "pxe"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-rook-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Rook-ceph service dashboard"
+  hostname    = "rook"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-router" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Router proxy service"
+  hostname    = "router"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-search" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Web search"
+  hostname    = "search"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-speed-test" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Internal speed test service"
+  hostname    = "speed-test"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-torrents-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Qbittorrent frontend"
+  hostname    = "torrents"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-unifi-dashboard-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Unifi dashboard ingress"
+  hostname    = "unifi-dashboard"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-zigbee2mqtt-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Zigbee frontend"
+  hostname    = "zigbee2mqtt"
+  domain      = "sparks.codes"
+}
+
+resource "opnsense_unbound_host_alias" "svc-zwavejs2mqtt-sparks-codes" {
+  override = opnsense_unbound_host_override.lb-internal-services.id
+
+  enabled     = true
+  description = "Zwave frontend"
+  hostname    = "zwavejs2mqtt"
+  domain      = "sparks.codes"
+}

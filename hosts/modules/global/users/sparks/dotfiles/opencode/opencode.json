@@ -1,0 +1,43 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "autoupdate": false,
+    "model": "localai/qwen3.8-27b-q8",
+    "provider": {
+        "localai": {
+            "npm": "@ai-sdk/openai-compatible",
+            "options": {
+                "baseURL": "https://local-ai.sparks.codes/v1"
+            },
+            "models": {
+                "gemma4:26b-a4b-it-qat": {
+                    "limit": {
+                        "context": 128000,
+                        "output": 65536
+                    }
+                },
+                "deepseek-coder-v2:16b": {
+                    "limit": {
+                        "context": 128000,
+                        "output": 65536
+                    }
+                },
+                "ternary-bonsai-27b": {
+                    "limit": {
+                        "context": 100000,
+                        "output": 65536
+                    }
+                },
+                "qwen3.8-27b-q4": {
+                    "limit": {
+                        "context": 100000,
+                        "output": 65536
+                    }
+                },
+            }
+        }
+    },
+    "lsp": {},
+    "plugin": [
+        "oh-my-openagent"
+    ]
+}

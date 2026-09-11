@@ -1,0 +1,81 @@
+{ inputs, pkgs, ... }:
+with pkgs;
+[
+  # archives
+  zip
+  xz
+  unzip
+  p7zip
+
+  # utils
+  ripgrep # recursively searches directories for a regex pattern
+  jq # A lightweight and flexible command-line JSON processor
+  yq
+  eza # A modern replacement for 'ls'
+  fzf # A command-line fuzzy finder
+
+  # networking tools
+  mtr # A network diagnostic tool
+  iperf3
+  dnsutils # `dig` + `nslookup`
+  ldns # replacement of `dig`, it provide the command `drill`
+  aria2 # A lightweight multi-protocol & multi-source command-line download utility
+  socat # replacement of openbsd-netcat
+  nmap # A utility for network discovery and security auditing
+  ipcalc # it is a calculator for the IPv4/v6 addresses
+
+  # misc
+  file
+  which
+  tree
+  gnused
+  gnutar
+  gawk
+  zstd
+  gnupg
+  parted
+  sshpass
+  sshfs
+  zoxide
+
+  # nix related
+  #
+  # it provides the command `nom` works just like `nix`
+  # with more details log output
+  nix-output-monitor
+  nixfmt
+  nil
+
+  # productivity
+  glow # markdown previewer in terminal
+
+  btop # replacement of htop/nmon
+  iotop # io monitoring
+  iftop # network monitoring
+
+  # infra
+  kubectl
+  krew
+  kubernetes-helm
+  fluxcd
+  sops
+  age
+  ntfy-sh
+
+  # development
+  nodejs
+  pnpm
+  prettier
+  python3
+  uv
+  go
+  go-task
+  gh
+  pre-commit
+  devenv
+
+  # system call monitoring
+  strace # system call monitoring
+  ltrace # library call monitoring
+  lsof # list open files
+]
