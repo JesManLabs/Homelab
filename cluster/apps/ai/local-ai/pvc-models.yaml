@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-ai-models-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /opt/local-ai.sparks.codes/models/
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - beta
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: local-ai-models-pvc
+  namespace: ai
+spec:
+  volumeName: local-ai-models-pv
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 100Gi

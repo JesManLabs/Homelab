@@ -1,0 +1,183 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+      interval: 15m
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 100
+        fsGroup: 100
+        runAsNonRoot: true
+    controllers:
+      server:
+        strategy: RollingUpdate
+        pod:
+          hostNetwork: true
+          annotations:
+            reloader.stakater.com/auto: "true"
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-server
+              tag: v3.1.0
+            env:
+              TZ: America/Chicago
+              DB_HOSTNAME: "immich-postgres-cluster-rw.media.svc.cluster.local"
+              DB_PORT: 5432
+              # DB_SSL_MODE: "require"
+              DB_DATABASE_NAME: "app"
+              DB_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-postgres-cluster-superuser
+                    key: username
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-postgres-cluster-superuser
+                    key: password
+            envFrom:
+              - configMapRef:
+                  name: immich-configmap
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 300m
+                memory: 3Gi
+
+      machine-learning:
+        strategy: RollingUpdate
+        pod:
+          annotations:
+            reloader.stakater.com/auto: "true"
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-machine-learning
+              tag: v3.1.0
+            envFrom:
+              # - secretRef:
+              #     name: immich-secret
+              - configMapRef:
+                  name: immich-configmap
+            env:
+              MPLCONFIGDIR: "/cache/matplotlib"
+            # resources:
+            #   requests:
+            #     cpu: 100m
+            #     memory: 274M
+            #   limits:
+            #     memory: 3949M
+
+      valkey:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/valkey-io/valkey
+              tag: 9.1.2
+
+    service:
+      server:
+        controller: server
+        ports:
+          http:
+            port: 2283
+      machine-learning:
+        controller: machine-learning
+        ports:
+          http:
+            port: 3003
+      valkey:
+        controller: valkey
+        ports:
+          http:
+            port: 6379
+
+    ingress:
+      main:
+        enabled: true
+        className: "cloudflare-tunnel"
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: "Photos"
+          hajimari.io/info: "Photo library"
+          hajimari.io/icon: "image-multiple"
+          hajimari.io/targetBlank: "true"
+        hosts:
+          - host: photos.sparks.codes
+            paths:
+              - path: "/"
+                pathType: "Prefix"
+                service:
+                  identifier: server
+                  port: http
+        tls:
+          - hosts:
+              - photos.sparks.codes
+            secretName: acme-crt-secret-sparks-codes
+      internal:
+        enabled: true
+        className: "traefik"
+        annotations:
+          hajimari.io/enable: "false"
+        hosts:
+          - host: photos.sparks.codes
+            paths:
+              - path: "/"
+                pathType: "Prefix"
+                service:
+                  identifier: server
+                  port: http
+        tls:
+          - hosts:
+              - photos.sparks.codes
+            secretName: acme-crt-secret-sparks-codes
+
+    persistence:
+      matplotlib:
+        type: emptyDir
+        advancedMounts:
+          server:
+            main:
+              - path: /config/matplotlib
+
+      library:
+        type: persistentVolumeClaim
+        existingClaim: local-immich-pvc
+        globalMounts:
+          - path: /data
+
+      cache:
+        type: persistentVolumeClaim
+        existingClaim: immich-machine-learning-cache
+        globalMounts:
+          - path: /cache
+            subPath: cache
+          - path: /.cache
+            subPath: dotCache
+
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          server:
+            main:
+              - path: /usr/src/app/.reverse-geocoding-dump
+                subPath: geocoding
+              - path: /usr/src/app/.transformers_cache
+                subPath: transformers

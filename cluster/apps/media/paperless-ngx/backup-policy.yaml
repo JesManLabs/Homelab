@@ -1,0 +1,43 @@
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: paperless-ngx
+  namespace: media
+spec:
+  repository:
+    kind: ClusterRepository
+    name: kopiur-repository
+  credentialProjection:
+    enabled: true
+  copyMethod: Direct
+  sources:
+    - pvc:
+        name: paperless-ngx-data
+  retention:
+    keepDaily: 7
+    keepWeekly: 4
+  mover:
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 100
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: RuntimeDefault
+  deletion:
+    onPolicyDelete: Delete
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotSchedule
+metadata:
+  name: paperless-ngx-daily
+  namespace: media
+spec:
+  policyRef:
+    name: paperless-ngx
+  schedule:
+    cron: "0 */3 * * *"
+    jitter: 30m
+    runOnCreate: true

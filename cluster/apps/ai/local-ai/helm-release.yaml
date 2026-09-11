@@ -1,0 +1,96 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: local-ai
+  namespace: ai
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+      interval: 15m
+  values:
+    defaultPodOptions:
+      runtimeClassName: nvidia
+      nodeSelector:
+        kubernetes.io/hostname: beta
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: localai/localai
+              tag: "master-gpu-nvidia-cuda-12"
+            env:
+              TZ: "America/Chicago"
+              CUDA_ERROR_LEVEL: "50"
+              NVIDIA_VISIBLE_DEVICES: "all"
+              LOCALAI_API_KEY: ${AI_LOCALAI_API_KEY}
+            resources:
+              requests:
+                memory: 16Gi
+                nvidia.com/gpu: 2
+              limits:
+                memory: 32Gi
+                nvidia.com/gpu: 2
+    persistence:
+      config:
+        enabled: true
+        type: persistentVolumeClaim
+        accessMode: ReadWriteMany
+        storageClass: ceph-filesystem
+        size: 5Gi
+        globalMounts:
+          - path: /configuration
+      models:
+        enabled: true
+        existingClaim: local-ai-models-pvc
+        globalMounts:
+          - path: /models
+      backends:
+        enabled: true
+        existingClaim: local-ai-backends-pvc
+        globalMounts:
+          - path: /backends
+      data:
+        enabled: true
+        type: persistentVolumeClaim
+        accessMode: ReadWriteMany
+        storageClass: ceph-filesystem
+        size: 15Gi
+        globalMounts:
+          - path: /data
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8080
+    ingress:
+      main:
+        enabled: true
+        className: traefik
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "240"
+          hajimari.io/enable: "true"
+          hajimari.io/icon: cloud-search
+          hajimari.io/info: "Local AI Runner"
+          hajimari.io/targetBlank: "true"
+        hosts:
+          - host: &host "local-ai.sparks.codes"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - secretName: acme-crt-secret-sparks-codes
+            hosts:
+              - *host

@@ -1,0 +1,33 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tailscale-local-ai
+  namespace: ai
+  annotations:
+    tailscale.com/proxy-group: local-ai-services
+spec:
+  ingressClassName: tailscale
+  tls:
+    - hosts:
+        - ai
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: local-ai
+                port:
+                  number: 8080
+
+---
+apiVersion: tailscale.com/v1alpha1
+kind: ProxyGroup
+metadata:
+  name: local-ai-services
+  namespace: ai
+spec:
+  type: ingress
+  replicas: 1

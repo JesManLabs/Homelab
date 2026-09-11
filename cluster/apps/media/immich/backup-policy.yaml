@@ -1,0 +1,43 @@
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: immich
+  namespace: media
+spec:
+  repository:
+    kind: ClusterRepository
+    name: kopiur-repository
+  credentialProjection:
+    enabled: true
+  copyMethod: Direct
+  sources:
+    - pvc:
+        name: local-immich-pvc
+  retention:
+    keepDaily: 7
+    keepWeekly: 4
+  mover:
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 100
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: RuntimeDefault
+  deletion:
+    onPolicyDelete: Delete
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotSchedule
+metadata:
+  name: immich-daily
+  namespace: media
+spec:
+  policyRef:
+    name: immich
+  schedule:
+    cron: "0 */4 * * *"
+    jitter: 30m
+    runOnCreate: true

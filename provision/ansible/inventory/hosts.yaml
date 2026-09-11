@@ -1,0 +1,84 @@
+---
+all:
+  hosts:
+    localhost:
+  children:
+    # -------------------------------------------
+    # Servers found in the server room
+    # -------------------------------------------
+    servers:
+      children:
+        linux_servers:
+
+    # -------------------------------------------
+    # Servers equipped with an iDRAC
+    # -------------------------------------------
+    servers_with_idracs:
+      hosts:
+        omega.sparks.codes:
+        lambda.sparks.codes:
+
+    # -------------------------------------------
+    # All Linux Machines ------------------------
+    # -------------------------------------------
+    linux:
+      children:
+        linux_servers:
+
+    linux_servers:
+      hosts:
+        rpi4-poe-1.sparks.codes:
+        rpi4-poe-2.sparks.codes:
+        rpi4-poe-3.sparks.codes:
+
+    nixos:
+      vars:
+        executable: /run/current-system/sw/bin/bash
+        ansible_shell_interpreter: /run/current-system/sw/bin/bash
+      children:
+        nixos_servers:
+        nixos_workstations:
+
+    nixos_servers:
+      hosts:
+        beta.sparks.codes:
+        tango.sparks.codes:
+        omega.sparks.codes:
+        sierra.sparks.codes:
+        romeo.sparks.codes:
+        whiskey.sparks.codes:
+        xray.sparks.codes:
+        lambda.sparks.codes:
+        kappa.sparks.codes:
+
+    nixos_workstations:
+      hosts:
+        alpha.sparks.codes:
+        delta.sparks.codes:
+
+    # -------------------------------------------
+    # Networking --------------------------------
+    # -------------------------------------------
+
+    cisco_nxos_switches:
+      hosts:
+        nexus.sparks.codes:
+
+    # -------------------------------------------
+    # K3s Cluster -------------------------------
+    # -------------------------------------------
+    k3s_cluster:
+      children:
+        k3s_masters:
+        # k3s_workers:
+
+    k3s_masters:
+      hosts:
+
+    # -------------------------------------------
+    # Aliases  ----------------------------------
+    # -------------------------------------------
+    storage:
+      hosts:
+        omega.sparks.codes:
+        tango.sparks.codes:

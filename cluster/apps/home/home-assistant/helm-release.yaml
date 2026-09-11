@@ -1,0 +1,105 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: home-assistant
+  namespace: home
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+      interval: 15m
+  values:
+    defaultPodOptions:
+      nodeSelector:
+        kubernetes.io/hostname: whiskey
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 100
+        runAsNonRoot: true
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: homeassistant/home-assistant
+              tag: "2026.9"
+            env:
+              TZ: "America/Chicago"
+            resources:
+              requests:
+                cpu: 50m
+                memory: 1Gi
+              limits:
+                cpu: 150m
+                memory: 2Gi
+    persistence:
+      config:
+        enabled: true
+        existingClaim: home-assistant-pvc
+        globalMounts:
+          - path: /config
+      media:
+        enabled: true
+        existingClaim: home-assistant-pvc-media
+        globalMounts:
+          - path: /media
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8123
+    ingress:
+      main:
+        enabled: true
+        className: "cloudflare-tunnel"
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/appName: "Home Assistant"
+          hajimari.io/info: Home management system
+          hajimari.io/icon: "home-assistant"
+          hajimari.io/targetBlank: "true"
+          # authentik.sparks.codes/enabled: "true"
+        hosts:
+          - host: home.sparks.codes
+            paths:
+              - path: "/"
+                pathType: "Prefix"
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - secretName: acme-crt-secret-sparks-codes
+            hosts:
+              - home.sparks.codes
+      internal:
+        enabled: true
+        className: "traefik"
+        annotations:
+          hajimari.io/enable: "false"
+        hosts:
+          - host: home.sparks.codes
+            paths:
+              - path: "/"
+                pathType: "Prefix"
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts:
+              - home.sparks.codes
+            secretName: acme-crt-secret-sparks-codes
